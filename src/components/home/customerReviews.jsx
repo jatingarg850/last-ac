@@ -87,9 +87,8 @@ export default function CustomerReviews() {
                     <Button text="<" className="nav-button" onClick={goToPrevious} />
                     <Button text=">" className="nav-button" onClick={goToNext} />
                 </div>
-                <h2 className="reviews-title">
-                    <span className="reviews-title__line">What Are Happy <span className="highlight">Customers</span></span>
-                    <span className="reviews-title__line">Saying !!</span>
+                <h2 className="reviews-title mobile-single-line">
+                    What Are Happy <span className="highlight">Customers</span> Saying !!
                 </h2>
                 <p className="reviews-description">
                     Don't just take our word for it. Here's what our satisfied customers have to say about their experience with AC Wallah.

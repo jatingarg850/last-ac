@@ -15,7 +15,7 @@ const Navbar = () => {
     password: ''
   });
   const [signupData, setSignupData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: ''
   });
@@ -50,7 +50,7 @@ const Navbar = () => {
     } else {
       // Reset form state when closing modal
       setLoginData({ email: '', password: '' });
-      setSignupData({ name: '', email: '', password: '' });
+      setSignupData({ username: '', email: '', password: '' });
       setIsSignUpMode(false);
     }
   };
@@ -183,7 +183,7 @@ const Navbar = () => {
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                name: signupData.name,
+                username: signupData.username,
                 email: signupData.email,
                 password: signupData.password,
                 is_admin: false // Default to non-admin user
@@ -203,7 +203,7 @@ const Navbar = () => {
         setUser(data);
         setIsPopupOpen(false);
         // Reset form state
-        setSignupData({ name: '', email: '', password: '' });
+        setSignupData({ username: '', email: '', password: '' });
         setError('');
         navigate('/'); // Redirect to home after successful signup
         
@@ -268,7 +268,7 @@ const Navbar = () => {
                 <div className="profile-menu">
                   <NavLink to="/profile" className="profile-icon">
                     <div className="avatar">
-                      {user.name ? user.name[0].toUpperCase() : 'U'}
+                      {user && user.username ? user.username[0].toUpperCase() : 'U'}
                     </div>
                   </NavLink>
                   {/* Show account type if present */}
@@ -345,10 +345,10 @@ const Navbar = () => {
                   <br />
                   <input 
                     type="text" 
-                    name="name"
+                    name="username"
                     className="auth-input" 
-                    placeholder="Name" 
-                    value={signupData.name}
+                    placeholder="Username" 
+                    value={signupData.username}
                     onChange={handleSignupChange}
                     required
                   />
