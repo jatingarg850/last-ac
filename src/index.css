@@ -3660,3 +3660,23 @@ tr:hover {
     max-width: 180px;
   }
 }
+
+/* Ensure testimonials header stays on one line or wraps naturally for mobile */
+.mobile-single-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .mobile-single-line {
+    font-size: 1.1rem;
+    flex-direction: row;
+    gap: 0.2em;
+    word-break: break-word;
+    white-space: normal;
+  }
+}

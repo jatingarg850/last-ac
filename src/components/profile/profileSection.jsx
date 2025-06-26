@@ -5,26 +5,29 @@ import { API_ENDPOINTS } from '../../config/api';
 
 const ProfileSection = () => {
     const [profileData, setProfileData] = useState({
-        name: '',
+        username: '',
         email: '',
+        photoUrl: '',
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({
-        name: '',
+        username: '',
         email: '',
     });
+    const [showPhotoInput, setShowPhotoInput] = useState(false);
+    const [photoInputValue, setPhotoInputValue] = useState('');
 
     useEffect(() => {
         // Get user data from localStorage
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-            // Directly use the user data without the fallback
             setProfileData({
-                name: user.name,
+                username: user.username,
                 email: user.email,
+                photoUrl: user.photoUrl || '',
             });
             setEditData({
-                name: user.name,
+                username: user.username,
                 email: user.email,
             });
         }
@@ -37,7 +40,7 @@ const ProfileSection = () => {
     const handleCancel = () => {
         setIsEditing(false);
         setEditData({
-            name: profileData.name,
+            username: profileData.username,
             email: profileData.email,
         });
     };
@@ -67,8 +70,9 @@ const ProfileSection = () => {
 
             const updatedUser = await response.json();
             setProfileData({
-                name: updatedUser.name,
+                username: updatedUser.username,
                 email: updatedUser.email,
+                photoUrl: updatedUser.photoUrl || '',
             });
 
             // Update localStorage
@@ -84,14 +88,80 @@ const ProfileSection = () => {
         }
     };
 
+    const handleAvatarEdit = () => {
+        setShowPhotoInput(true);
+        setPhotoInputValue('');
+    };
+
+    const handlePhotoInputSave = () => {
+        if (photoInputValue) {
+            setProfileData(prev => ({ ...prev, photoUrl: photoInputValue }));
+            // Update localStorage user
+            const user = JSON.parse(localStorage.getItem('user'));
+            localStorage.setItem('user', JSON.stringify({ ...user, photoUrl: photoInputValue }));
+            setShowPhotoInput(false);
+        }
+    };
+
+    const handlePhotoInputCancel = () => {
+        setShowPhotoInput(false);
+        setPhotoInputValue('');
+    };
+
     return (
         <div className="profile-container">
             <div className="profile-section">
                 {/* Avatar */}
-                <div className="profile-avatar">
-                    <div className="avatar-circle">
-                        {profileData.name ? profileData.name[0].toUpperCase() : 'U'}
-                    </div>
+                <div className="profile-avatar" style={{ position: 'relative' }}>
+                    {profileData.photoUrl ? (
+                        <img
+                            src={profileData.photoUrl}
+                            alt="Profile"
+                            className="avatar-circle"
+                            style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                    ) : (
+                        <div className="avatar-circle">
+                            {profileData.username ? profileData.username[0].toUpperCase() : 'U'}
+                        </div>
+                    )}
+                    <button
+                        className="avatar-edit-btn"
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                            background: '#fff',
+                            border: '1px solid #ccc',
+                            borderRadius: '50%',
+                            width: 28,
+                            height: 28,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            boxShadow: '0 1px 4px rgba(0,0,0,0.1)'
+                        }}
+                        title="Edit Photo"
+                        onClick={handleAvatarEdit}
+                    >
+                        <span role="img" aria-label="edit">✏️</span>
+                    </button>
+                    {showPhotoInput && (
+                        <div style={{ marginTop: 10, position: 'absolute', left: '50%', transform: 'translateX(-50%)', background: '#fff', padding: 10, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', zIndex: 10, width: 220 }}>
+                            <input
+                                type="text"
+                                placeholder="Paste Google Drive image URL"
+                                value={photoInputValue}
+                                onChange={e => setPhotoInputValue(e.target.value)}
+                                style={{ width: '100%', padding: 6, borderRadius: 4, border: '1px solid #ccc', marginBottom: 8 }}
+                            />
+                            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                                <button onClick={handlePhotoInputSave} style={{ padding: '4px 10px', borderRadius: 4, background: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>Save</button>
+                                <button onClick={handlePhotoInputCancel} style={{ padding: '4px 10px', borderRadius: 4, background: '#eee', color: '#333', border: 'none', cursor: 'pointer' }}>Cancel</button>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Profile Details */}
@@ -101,8 +171,8 @@ const ProfileSection = () => {
                             <label>Username</label>
                             <input
                                 type="text"
-                                name="name"
-                                value={editData.name}
+                                name="username"
+                                value={editData.username}
                                 onChange={handleChange}
                             />
                         </div>
@@ -130,7 +200,7 @@ const ProfileSection = () => {
                     <div className="profile-details">
                         <div className="detail-group">
                             <label>Username</label>
-                            <p>{profileData.name}</p>
+                            <p>{profileData.username}</p>
                         </div>
 
                         <div className="detail-group">
