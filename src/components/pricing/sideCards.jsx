@@ -53,7 +53,7 @@ const SubscriptionCards = () => {
     const plans = [
         {
             name: 'Basic',
-            price: 19, // Example price in USD
+            price: 1, // Example price in USD
             description: 'This plan is for individuals or small teams just getting started.',
             features: [
                 '5 team members',
@@ -63,7 +63,7 @@ const SubscriptionCards = () => {
         },
         {
             name: 'Intermediate',
-            price: 39, // Example price in USD
+            price: 2, // Example price in USD
             description: 'This plan is for growing teams needing more features.',
             features: [
                 '10 team members',
@@ -73,7 +73,7 @@ const SubscriptionCards = () => {
         },
         {
             name: 'Advanced',
-            price: 79, // Example price in USD
+            price: 3, // Example price in USD
             description: 'This plan is for large teams and businesses with advanced needs.',
             features: [
                 'Unlimited team members',
@@ -112,7 +112,7 @@ const SubscriptionCards = () => {
                             <Button
                                 text="Get Started"
                                 className="default-button"
-                                onClick={() => openRazorpay(plan.price * 80, plan.name)}
+                                onClick={() => openRazorpay(plan.price, plan.name)}
                             />
                         </div>
                     </div>

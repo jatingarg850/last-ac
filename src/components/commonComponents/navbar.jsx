@@ -21,6 +21,7 @@ const Navbar = () => {
   });
   const [error, setError] = useState('');
   const [user, setUser] = useState(null);
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
 
   useEffect(() => {
     // Check if user is logged in
@@ -43,6 +44,15 @@ const Navbar = () => {
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
     setError('');
+    // Close mobile menu when opening auth modal
+    if (!isPopupOpen) {
+      setIsMenuOpen(false);
+    } else {
+      // Reset form state when closing modal
+      setLoginData({ email: '', password: '' });
+      setSignupData({ name: '', email: '', password: '' });
+      setIsSignUpMode(false);
+    }
   };
 
   const handleLoginChange = (e) => {
@@ -100,6 +110,9 @@ const Navbar = () => {
             localStorage.setItem('user', JSON.stringify(user));
             setUser(user);
             setIsPopupOpen(false);
+            // Reset form state
+            setLoginData({ email: '', password: '' });
+            setError('');
             
             // Check if user is admin and redirect
             console.log('Is admin?', user.is_admin);
@@ -189,6 +202,9 @@ const Navbar = () => {
         localStorage.setItem('user', JSON.stringify(data));
         setUser(data);
         setIsPopupOpen(false);
+        // Reset form state
+        setSignupData({ name: '', email: '', password: '' });
+        setError('');
         navigate('/'); // Redirect to home after successful signup
         
     } catch (err) {
@@ -212,6 +228,16 @@ const Navbar = () => {
 
   const closeOtpPopup = () => {
     setIsOtpPopupOpen(false); // Close OTP popup
+  };
+
+  const switchToSignUp = () => {
+    setIsSignUpMode(true);
+    setError('');
+  };
+
+  const switchToSignIn = () => {
+    setIsSignUpMode(false);
+    setError('');
   };
 
   return (
@@ -312,7 +338,8 @@ const Navbar = () => {
           <div className="auth-page">
             <Button text="×" className="popup-close-button" onClick={togglePopup} />
             <div className="container" id="container">
-              <div className="form-container sign-up-container">
+              {/* Mobile-friendly form switching */}
+              <div className="form-container sign-up-container" style={{ display: isSignUpMode ? 'block' : 'none' }}>
                 <form onSubmit={handleSignup}>
                   <h1 className="auth-heading">Create Account</h1>
                   <br />
@@ -346,9 +373,27 @@ const Navbar = () => {
                   {error && <p style={{ color: 'red', fontSize: '12px' }}>{error}</p>}
                   <br />
                   <Button text="Sign Up" className="default-button auth-btn" type="submit" />
+                  <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                    <p style={{ fontSize: '14px', color: '#666' }}>
+                      Already have an account?{' '}
+                      <button 
+                        type="button" 
+                        onClick={switchToSignIn}
+                        style={{ 
+                          background: 'none', 
+                          border: 'none', 
+                          color: '#0066ff', 
+                          cursor: 'pointer',
+                          textDecoration: 'underline'
+                        }}
+                      >
+                        Sign In
+                      </button>
+                    </p>
+                  </div>
                 </form>
               </div>
-              <div className="form-container sign-in-container">
+              <div className="form-container sign-in-container" style={{ display: isSignUpMode ? 'none' : 'block' }}>
                 <form onSubmit={handleLogin}>
                   <h1 className="auth-heading">Sign in</h1>
                   <span className="auth-span">use your email account</span>
@@ -373,6 +418,24 @@ const Navbar = () => {
                   {error && <p style={{ color: 'red', fontSize: '12px' }}>{error}</p>}
                   <br />
                   <Button text="Sign In" className="default-button auth-btn" type="submit" />
+                  <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                    <p style={{ fontSize: '14px', color: '#666' }}>
+                      Don't have an account?{' '}
+                      <button 
+                        type="button" 
+                        onClick={switchToSignUp}
+                        style={{ 
+                          background: 'none', 
+                          border: 'none', 
+                          color: '#0066ff', 
+                          cursor: 'pointer',
+                          textDecoration: 'underline'
+                        }}
+                      >
+                        Sign Up
+                      </button>
+                    </p>
+                  </div>
                 </form>
               </div>
               <div className="overlay-container">
@@ -384,7 +447,10 @@ const Navbar = () => {
                       text="Sign In"
                       className="default-button-overlay"
                       id="signIn"
-                      onClick={() => document.getElementById('container').classList.remove('right-panel-active')}
+                      onClick={() => {
+                        document.getElementById('container').classList.remove('right-panel-active');
+                        setIsSignUpMode(false);
+                      }}
                     />
                   </div>
                   <div className="overlay-panel overlay-right">
@@ -394,7 +460,10 @@ const Navbar = () => {
                       text="Sign Up"
                       className="default-button-overlay"
                       id="signUp"
-                      onClick={() => document.getElementById('container').classList.add('right-panel-active')}
+                      onClick={() => {
+                        document.getElementById('container').classList.add('right-panel-active');
+                        setIsSignUpMode(true);
+                      }}
                     />
                   </div>
                 </div>
