@@ -268,7 +268,15 @@ const Navbar = () => {
                 <div className="profile-menu">
                   <NavLink to="/profile" className="profile-icon">
                     <div className="avatar">
-                      {user && user.username ? user.username[0].toUpperCase() : 'U'}
+                      {user && user.photo_link ? (
+                        <img
+                          src={user.photo_link}
+                          alt="Profile"
+                          style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        user && user.username ? user.username[0].toUpperCase() : 'U'
+                      )}
                     </div>
                   </NavLink>
                   {/* Show account type if present */}

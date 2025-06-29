@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../commonComponents/button';
+import { API_ENDPOINTS } from '../../config/api';
 
 const openRazorpay = async (amount, planName) => {
     const options = {
@@ -16,7 +17,7 @@ const openRazorpay = async (amount, planName) => {
                 try {
                     const updatedUser = { ...user, account_type: planName.toLowerCase() };
                     // Update backend
-                    await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/users/${user.id}`, {
+                    await fetch(`${API_ENDPOINTS.USERS}/${user.id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(updatedUser)

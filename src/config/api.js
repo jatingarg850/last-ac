@@ -1,5 +1,5 @@
 // Base API URL
-export const API_BASE_URL = 'https://actext-c24df4a0ce27.herokuapp.com';
+export const API_BASE_URL = 'https://ac-node.onrender.com';
 
 // API Endpoints
 export const API_ENDPOINTS = {
