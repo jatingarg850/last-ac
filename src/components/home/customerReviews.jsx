@@ -81,19 +81,20 @@ export default function CustomerReviews() {
     const currentReview = reviews[currentReviewIndex];
 
     return (
-        <div className="reviews-section">
+        <div className="reviews-section" style={{ padding: '0 24px' }}>
             <div className="reviews-header">
-                <div className="reviews-navigation">
-                    <Button text="<" className="nav-button" onClick={goToPrevious} />
-                    <Button text=">" className="nav-button" onClick={goToNext} />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', marginBottom: '1rem' }}>
+                    <h2 className="reviews-title mobile-single-line" style={{ margin: 0 }}>
+                        What Are Happy <span className="highlight">Customers</span> Saying !!
+                    </h2>
+                    <div className="reviews-navigation" style={{ margin: 0 }}>
+                        <Button text="<" className="nav-button" onClick={goToPrevious} />
+                        <Button text=">" className="nav-button" onClick={goToNext} />
+                    </div>
                 </div>
-                <h2 className="reviews-title mobile-single-line">
-                    What Are Happy <span className="highlight">Customers</span> Saying !!
-                </h2>
                 <p className="reviews-description">
                     Don't just take our word for it. Here's what our satisfied customers have to say about their experience with AC Wallah.
                 </p>
-                
                 {/* Review indicators */}
                 <div className="review-indicators">
                     {reviews.map((_, index) => (
@@ -105,7 +106,6 @@ export default function CustomerReviews() {
                     ))}
                 </div>
             </div>
-            
             <div className="review-card">
                 <img
                     src={currentReview.image}
